@@ -1,0 +1,12 @@
+{
+    "name": "gplcart/demo",
+    "type": "gplcart-module",
+    "description": "Demo content for your GPL Cart store",
+    "keywords": ["gplcart", "ecommerce", "shopping cart", "gplcart module", "php"],
+    "license": "GPL-3.0+",
+    "require": {
+        "gplcart/composer-module-installer": "*"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
