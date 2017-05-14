@@ -1,10 +1,10 @@
 <?php
 
 /**
- * @package Demo 
- * @author Iurii Makukh <gplcart.software@gmail.com> 
- * @copyright Copyright (c) 2017, Iurii Makukh <gplcart.software@gmail.com> 
- * @license https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0+ 
+ * @package Demo
+ * @author Iurii Makukh <gplcart.software@gmail.com>
+ * @copyright Copyright (c) 2017, Iurii Makukh <gplcart.software@gmail.com>
+ * @license https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0+
  */
 
 namespace gplcart\modules\demo\controllers;
@@ -107,7 +107,7 @@ class Demo extends BackendController
         $store_id = $this->getSubmitted('store_id', 1);
         $handler_id = $this->getSubmitted('handler_id');
 
-        $result = $this->demo->create($handler_id, $store_id);
+        $result = $this->demo->create($store_id, $handler_id);
 
         if ($result === true) {
             $this->redirect('', $this->text('Demo content has been created'), 'success');
@@ -123,9 +123,7 @@ class Demo extends BackendController
     {
         $this->controlAccessSuperAdmin();
 
-        $store_id = $this->getSubmitted('store_id', 1);
-        $handler_id = $this->getSubmitted('handler_id');
-        $result = $this->demo->delete($handler_id, $store_id);
+        $result = $this->demo->delete($this->getSubmitted('store_id', 1));
 
         if ($result === true) {
             $this->redirect('', $this->text('Demo content has been deleted'), 'success');

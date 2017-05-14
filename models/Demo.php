@@ -1,14 +1,15 @@
 <?php
 
 /**
- * @package Demo 
- * @author Iurii Makukh <gplcart.software@gmail.com> 
- * @copyright Copyright (c) 2017, Iurii Makukh <gplcart.software@gmail.com> 
- * @license https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0+ 
+ * @package Demo
+ * @author Iurii Makukh <gplcart.software@gmail.com>
+ * @copyright Copyright (c) 2017, Iurii Makukh <gplcart.software@gmail.com>
+ * @license https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0+
  */
 
 namespace gplcart\modules\demo\models;
 
+use Exception;
 use gplcart\core\Cache,
     gplcart\core\Model,
     gplcart\core\Handler;
@@ -75,74 +76,107 @@ class Demo extends Model
 
     /**
      * Create a demo content
-     * @param string $handler_id
      * @param integer $store_id
+     * @param string $handler_id
      * @return string|integer
      */
-    public function create($handler_id, $store_id)
+    public function create($store_id, $handler_id)
     {
-        $existing = $this->getCreatedEntityId($handler_id, $store_id);
-
-        if (!empty($existing)) {
-            return $this->language->text('Demo content already exists');
+        if ($this->getCreated($store_id)) {
+            return $this->language->text('Demo content already exists for the store');
         }
 
         $handlers = $this->getHandlers();
-        return Handler::call($handlers, $handler_id, 'create', array($store_id, $this));
+
+        try {
+            $created = Handler::call($handlers, $handler_id, 'create', array($store_id, $this));
+        } catch (Exception $ex) {
+            return $ex->getMessage();
+        }
+
+        if (empty($created)) {
+            return $this->language->text('Demo content has not been created');
+        }
+
+        $this->setCreated($store_id, $handler_id, $created);
+        return true;
     }
 
     /**
      * Deletes the demo content
-     * @param string $handler_id
      * @param integer $store_id
      * @return string|integer
      */
-    public function delete($handler_id, $store_id)
+    public function delete($store_id)
     {
-        $existing = $this->getCreatedEntityId($handler_id, $store_id);
+        $created = $this->getCreated($store_id);
 
-        if (empty($existing)) {
+        if (empty($created)) {
             return true;
         }
 
         $handlers = $this->getHandlers();
-        return Handler::call($handlers, $handler_id, 'delete', array($store_id, $this));
+
+        try {
+            $result = Handler::call($handlers, $created['handler_id'], 'delete', array($store_id, $this));
+        } catch (Exception $ex) {
+            $result = $ex->getMessage();
+        }
+
+        $this->resetCreated($store_id);
+        return $result;
     }
 
     /**
      * Set an array of created entity IDs in the database
-     * @param string $handler_id
      * @param integer $store_id
+     * @param string $handler_id
      * @param array $data
      * @return boolean
      */
-    public function setCreatedEntityId($handler_id, $store_id, array $data)
+    public function setCreated($store_id, $handler_id, array $data)
     {
+        $saved = $this->config->get('module_demo_content', array());
+
         // Remove unneeded keys before saving
-        $cleaned = array_map('array_values', $data);
-        return $this->config->set("module_demo_{$handler_id}_{$store_id}", $cleaned);
+        $saved[$store_id] = array_map('array_values', $data);
+        $saved[$store_id]['handler_id'] = $handler_id;
+
+        return $this->config->set('module_demo_content', $saved);
     }
 
     /**
      * Returns an array of previously created entity IDs
-     * @param string $handler_id
      * @param integer $store_id
-     * @return array
+     * @param null|string $key
+     * @param mixed $default
+     * @return mixed
      */
-    public function getCreatedEntityId($handler_id, $store_id)
+    public function getCreated($store_id, $key = null, $default = array())
     {
-        return $this->config->get("module_demo_{$handler_id}_{$store_id}", array());
+        $data = $this->config->get('module_demo_content', array());
+        $per_store = isset($data[$store_id]) ? (array) $data[$store_id] : $default;
+
+        if (isset($key)) {
+            return isset($per_store[$key]) ? (array) $per_store[$key] : $default;
+        }
+        return $per_store;
     }
 
     /**
      * Removes all saved data about previously created entity IDs from the database
-     * @param string $handler_id
      * @param integer $store_id
      * @return boolean
      */
-    public function resetCreatedEntityId($handler_id, $store_id)
+    public function resetCreated($store_id)
     {
-        return $this->config->reset("module_demo_{$handler_id}_{$store_id}");
+        $data = $this->config->get('module_demo_content', array());
+        unset($data[$store_id]);
+
+        if (empty($data)) {
+            return $this->config->reset('module_demo_content');
+        }
+        return $this->config->set('module_demo_content', $data);
     }
 
 }

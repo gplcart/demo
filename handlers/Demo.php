@@ -114,10 +114,9 @@ class Demo
     /**
      * Creates all demo content
      * @param integer $store_id
-     * @param \gplcart\modules\demo\models\Demo $model
      * @return boolean
      */
-    public function create($store_id, \gplcart\modules\demo\models\Demo $model)
+    public function create($store_id)
     {
         set_time_limit(0);
 
@@ -132,7 +131,45 @@ class Demo
         $this->createFiles();
         $this->createCollectionItems();
 
-        $model->setCreatedEntityId('default', $store_id, $this->created);
+        return $this->created;
+    }
+
+    /**
+     * Deletes all created demo content
+     * @param integer $store_id
+     * @param \gplcart\modules\demo\models\Demo $model
+     */
+    public function delete($store_id, $model)
+    {
+        set_time_limit(0);
+
+        foreach ($model->getCreated($store_id) as $entity => $ids) {
+            foreach ($ids as $id) {
+                // Don't call methods dynamically $this->{$entity}
+                // to make them visible in IDE
+                switch ($entity) {
+                    case 'product':
+                        $this->product->delete($id);
+                        break;
+                    case 'category':
+                        $this->category->delete($id);
+                        break;
+                    case 'category_group':
+                        $this->category_group->delete($id);
+                        break;
+                    case 'collection':
+                        $this->collection->delete($id);
+                        break;
+                    case 'collection_item':
+                        $this->collection_item->delete($id);
+                        break;
+                    case 'file':
+                        $this->file->deleteAll($id);
+                        break;
+                }
+            }
+        }
+
         return true;
     }
 
@@ -260,46 +297,6 @@ class Demo
             return copy($source, $destination) ? $destination : '';
         }
         return '';
-    }
-
-    /**
-     * Deletes all created demo content
-     * @param integer $store_id
-     * @param \gplcart\modules\demo\models\Demo $model
-     */
-    public function delete($store_id, $model)
-    {
-        set_time_limit(0);
-
-        foreach ($model->getCreatedEntityId('default', $store_id) as $entity => $ids) {
-            foreach ($ids as $id) {
-                // Don't call methods dynamically $this->{$entity}
-                // to make them visible in IDE
-                switch ($entity) {
-                    case 'product':
-                        $this->product->delete($id);
-                        break;
-                    case 'category':
-                        $this->category->delete($id);
-                        break;
-                    case 'category_group':
-                        $this->category_group->delete($id);
-                        break;
-                    case 'collection':
-                        $this->collection->delete($id);
-                        break;
-                    case 'collection_item':
-                        $this->collection_item->delete($id);
-                        break;
-                    case 'file':
-                        $this->file->deleteAll($id);
-                        break;
-                }
-            }
-        }
-
-        $model->resetCreatedEntityId('default', $store_id);
-        return true;
     }
 
 }

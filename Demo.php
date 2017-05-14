@@ -66,7 +66,6 @@ class Demo extends Module
      */
     public function hookCliRouteList(array &$routes)
     {
-        // Create
         $routes['demo-create'] = array(
             'handlers' => array(
                 'process' => array('gplcart\\modules\\demo\\controllers\\Cli', 'createCli')
@@ -75,12 +74,11 @@ class Demo extends Module
                 'description' => 'Populate a store with a demo content',
                 'options' => array(
                     '--package' => 'Optional. A package ID used as an source. Defaults to "default"',
-                    '--store' => 'Optional. A store ID to be populated with the demo content. Defaults to 1'
+                    '--store' => 'Optional. A numeric ID of the store you want to create demo content for. Defaults to 1'
                 )
             )
         );
 
-        // Delete
         $routes['demo-delete'] = array(
             'handlers' => array(
                 'process' => array('gplcart\\modules\\demo\\controllers\\Cli', 'deleteCli')
@@ -88,20 +86,41 @@ class Demo extends Module
             'help' => array(
                 'description' => 'Delete all created demo content from a store',
                 'options' => array(
-                    '--package' => 'Optional. A package ID that was used as an source. Defaults to "default"',
-                    '--store' => 'Optional. A store ID that contains the demo content. Defaults to 1'
+                    '--package' => 'Optional. A package ID used as an source. Defaults to "default"',
+                    '--store' => 'Optional. A numeric ID of the store you want to delete demo content from. Defaults to 1'
                 )
             )
         );
     }
 
     /**
-     * Implements hook "cli.install.finish"
+     * Implements hook "store.get.after"
+     * @param array $store
+     */
+    public function hookStoreGetAfter(array &$store)
+    {
+        /* @var $demo_model \gplcart\modules\demo\models\Demo */
+        $demo_model = $this->getInstance('gplcart\\modules\\demo\\models\\Demo');
+
+        /* @var $collection_model \gplcart\core\models\Collection */
+        $collection_model = $this->getInstance('gplcart\\core\\models\\Collection');
+
+        // Adjust the store collection settings to show the demo content
+        foreach ($demo_model->getCreated($store['store_id'], 'collection') as $id) {
+            $collection = $collection_model->get($id);
+            if (!empty($collection['status']) && isset($store['data']["collection_{$collection['type']}"])) {
+                $store['data']["collection_{$collection['type']}"] = $id;
+            }
+        }
+    }
+
+    /**
+     * Implements hook "cli.install.after"
      * @param mixed $result
      * @param string $message
      * @param \gplcart\core\controllers\cli\Install $controller
      */
-    public function hookCliInstallFinish($result, &$message, $controller)
+    public function hookCliInstallAfter($result, &$message, $controller)
     {
         if ($result !== true) {
             return null;
@@ -123,7 +142,7 @@ class Demo extends Module
             return null;
         }
 
-        $created_result = $model->create(array_search($input, $options), 1);
+        $created_result = $model->create(1, array_search($input, $options));
 
         if ($created_result !== true) {
             $controller->line($created_result);
@@ -139,11 +158,9 @@ class Demo extends Module
     protected function getHandlerOptions($model, $controller)
     {
         $options = array($controller->text('No demo'));
-
         foreach ($model->getHandlers() as $id => $handler) {
             $options[$id] = "$id - {$handler['title']}";
         }
-
         return $options;
     }
 

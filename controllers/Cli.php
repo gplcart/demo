@@ -64,7 +64,7 @@ class Cli extends CliController
     public function createCli()
     {
         if ($this->validateCli()) {
-            $result = $this->demo->create($this->data_handler_id, $this->data_store_id);
+            $result = $this->demo->create($this->data_store_id, $this->data_handler_id);
             if ($result !== true) {
                 $this->setError('result', $result);
             }
@@ -79,7 +79,7 @@ class Cli extends CliController
     public function deleteCli()
     {
         if ($this->validateCli()) {
-            $result = $this->demo->delete($this->data_handler_id, $this->data_store_id);
+            $result = $this->demo->delete($this->data_store_id);
             if ($result !== true) {
                 $this->setError('result', $result);
             }
