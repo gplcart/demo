@@ -10,13 +10,13 @@ return array(
     array(
         'weight' => 0,
         'status' => 1,
-        'value' => $this->created['file']['Tissot banner 1'],
+        'value' => $this->created['file']['Tissot watches'],
         'collection_id' => $this->created['collection']['Banners']
     ),
     array(
         'weight' => 1,
         'status' => 1,
-        'value' => $this->created['file']['Tissot banner 2'],
+        'value' => $this->created['file']['Casio watches'],
         'collection_id' => $this->created['collection']['Banners']
     ),
     array(

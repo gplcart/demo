@@ -8,12 +8,12 @@
  */
 return array(
     array(
-        'title' => 'Tissot banner 1',
-        'path' => __DIR__ . '/../../image/default/banner/tissot-banner-1.jpg'
+        'title' => 'Tissot watches',
+        'path' => __DIR__ . '/../../image/default/banner/tissot.jpg'
     ),
     array(
-        'title' => 'Tissot banner 2',
-        'path' => __DIR__ . '/../../image/default/banner/tissot-banner-2.jpg'
+        'title' => 'Casio watches',
+        'path' => __DIR__ . '/../../image/default/banner/casio.jpg'
     )
 );
 
