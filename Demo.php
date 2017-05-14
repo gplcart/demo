@@ -136,9 +136,9 @@ class Demo extends Module
         }
 
         $title = $controller->text('Would you like to create demo content? Enter a number of demo package');
-        $input = (int) $controller->menu($options, 0, $title);
+        $input = $controller->menu($options, 0, $title);
 
-        if ($input < 2) {
+        if (empty($input)) {
             return null;
         }
 
