@@ -10,6 +10,7 @@
 namespace gplcart\modules\demo\handlers;
 
 use gplcart\core\models\File as FileModel,
+    gplcart\core\models\User as UserModel,
     gplcart\core\models\Product as ProductModel,
     gplcart\core\models\Category as CategoryModel,
     gplcart\core\models\Collection as CollectionModel,
@@ -80,6 +81,13 @@ class Demo
     protected $store_id;
 
     /**
+     * The current user ID
+     * @var integer
+     */
+    protected $user_id;
+
+    /**
+     * @param UserModel $user
      * @param FileModel $file
      * @param ProductModel $product
      * @param CategoryModel $category
@@ -87,9 +95,9 @@ class Demo
      * @param CategoryGroupModel $category_group
      * @param CollectionItemModel $collection_item
      */
-    public function __construct(FileModel $file, ProductModel $product,
-            CategoryModel $category, CollectionModel $collection,
-            CategoryGroupModel $category_group,
+    public function __construct(UserModel $user, FileModel $file,
+            ProductModel $product, CategoryModel $category,
+            CollectionModel $collection, CategoryGroupModel $category_group,
             CollectionItemModel $collection_item)
     {
 
@@ -99,6 +107,8 @@ class Demo
         $this->collection = $collection;
         $this->category_group = $category_group;
         $this->collection_item = $collection_item;
+
+        $this->user_id = $user->getSession('user_id');
     }
 
     /**
