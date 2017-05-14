@@ -28,6 +28,7 @@ The following options available for both commands:
 
 - Only super admin can create/delete demo content from UI
 - The module is enabled by default, you don't need to enable it manually
+- Don't forget to disable the module on production to prevent overriding store settings
 
 
 **Installation**
