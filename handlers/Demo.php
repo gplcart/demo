@@ -109,6 +109,10 @@ class Demo
         $this->collection_item = $collection_item;
 
         $this->user_id = $user->getSession('user_id');
+
+        if (empty($this->user_id)) {
+            $this->user_id = 1; // CLI mode, session is empty
+        }
     }
 
     /**
@@ -144,6 +148,11 @@ class Demo
         set_time_limit(0);
 
         foreach ($model->getCreated($store_id) as $entity => $ids) {
+
+            if (!is_array($ids)) {
+                continue;
+            }
+
             foreach ($ids as $id) {
                 // Don't call methods dynamically $this->{$entity}
                 // to make them visible in IDE
