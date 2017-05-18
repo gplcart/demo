@@ -99,6 +99,10 @@ class Demo extends Module
      */
     public function hookStoreGetAfter(array &$store)
     {
+        if(empty($store['store_id'])){
+            return null;
+        }
+        
         /* @var $demo_model \gplcart\modules\demo\models\Demo */
         $demo_model = $this->getInstance('gplcart\\modules\\demo\\models\\Demo');
 
