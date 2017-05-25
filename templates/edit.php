@@ -31,9 +31,9 @@
           <div class="form-group<?php echo $this->error('store_id', ' has-error'); ?>">
             <label><?php echo $this->text('Store'); ?></label>
             <select class="form-control" name="demo[store_id]">
-              <?php foreach ($stores as $store_id => $store_name) { ?>
+              <?php foreach ($stores as $store_id => $store) { ?>
               <option value="<?php echo $store_id; ?>"<?php echo isset($demo['store_id']) && $demo['store_id'] == $store_id ? ' selected' : ''; ?>>
-                <?php echo $this->e($store_name); ?>
+                <?php echo $this->e($store['name']); ?>
               </option>
               <?php } ?>
             </select>

@@ -42,7 +42,7 @@ class Demo extends BackendController
         $this->setTitleEditDemo();
         $this->setBreadcrumbEditDemo();
 
-        $this->setData('stores', $this->store->getNames());
+        $this->setData('stores', $this->store->getList());
         $this->setData('handlers', $this->demo->getHandlers());
 
         $this->submitDemo();
