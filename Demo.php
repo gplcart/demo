@@ -99,10 +99,10 @@ class Demo extends Module
      */
     public function hookStoreGetAfter(array &$store)
     {
-        if(empty($store['store_id'])){
+        if (empty($store['store_id'])) {
             return null;
         }
-        
+
         /* @var $demo_model \gplcart\modules\demo\models\Demo */
         $demo_model = $this->getInstance('gplcart\\modules\\demo\\models\\Demo');
 
@@ -132,7 +132,6 @@ class Demo extends Module
 
         /* @var $model \gplcart\modules\demo\models\Demo */
         $model = $this->getInstance('gplcart\\modules\\demo\\models\\Demo');
-
         $options = $this->getHandlerOptions($model, $controller);
 
         if (count($options) < 2) {
@@ -143,11 +142,16 @@ class Demo extends Module
         $input = $controller->menu($options, 0, $title);
 
         if (empty($input)) {
-            return null;
+            return null; // Finished
         }
 
-        $created_result = $model->create(1, array_search($input, $options));
+        $handler_id = array_search($input, $options);
 
+        if (empty($handler_id)) {
+            return null; // Refused
+        }
+
+        $created_result = $model->create(1, $handler_id);
         if ($created_result !== true) {
             $controller->line($created_result);
         }
