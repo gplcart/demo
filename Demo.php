@@ -126,12 +126,20 @@ class Demo extends Module
      */
     public function hookCliInstallAfter($result, &$message, $controller)
     {
-        if ($result !== true) {
-            return null;
+        if ($result === true && $controller->getCommand() === 'install') {
+            $this->createDemo($controller);
         }
+    }
 
+    /**
+     * Create demo in wizard mode
+     * @param \gplcart\core\controllers\cli\Install $controller
+     */
+    protected function createDemo($controller)
+    {
         /* @var $model \gplcart\modules\demo\models\Demo */
         $model = $this->getInstance('gplcart\\modules\\demo\\models\\Demo');
+
         $options = $this->getHandlerOptions($model, $controller);
 
         if (count($options) < 2) {
