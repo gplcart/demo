@@ -108,9 +108,9 @@ class Demo
         $this->category_group = $category_group;
         $this->collection_item = $collection_item;
 
-        $this->user_id = $user->getSession('user_id');
+        $this->user_id = $user->getId();
 
-        if (empty($this->user_id)) {
+        if (GC_CLI) {
             $this->user_id = 1; // CLI mode, session is empty
         }
     }
@@ -301,7 +301,7 @@ class Demo
      */
     protected function copyFile($source, $directory)
     {
-        if (file_exists($directory) || mkdir($directory, 0755, true)) {
+        if (file_exists($directory) || mkdir($directory, 0775, true)) {
             $destination = gplcart_file_unique("$directory/" . basename($source));
             return copy($source, $destination) ? $destination : '';
         }
