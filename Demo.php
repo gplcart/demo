@@ -41,26 +41,6 @@ class Demo extends Module
     }
 
     /**
-     * Implements hook "dashboard.intro"
-     * @param array $items
-     * @param \gplcart\core\controllers\backend\Dashboard $controller
-     */
-    public function hookDashboardIntro(array &$items, $controller)
-    {
-        if ($controller->isSuperadmin()) {
-
-            $last = end($items);
-            $count = count($items);
-            $max = isset($last['weight']) && $last['weight'] > $count ? $last['weight'] : $count;
-
-            $items['demo'] = array(
-                'weight' => $max++,
-                'rendered' => $controller->render('demo|intro')
-            );
-        }
-    }
-
-    /**
      * Implements hook "cli.route.list"
      * @param array $routes
      */
