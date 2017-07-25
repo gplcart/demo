@@ -100,13 +100,13 @@ class Demo extends Module
 
     /**
      * Implements hook "cli.install.after"
-     * @param mixed $result
+     * @param array $result
      * @param string $message
      * @param \gplcart\core\controllers\cli\Install $controller
      */
     public function hookCliInstallAfter($result, &$message, $controller)
     {
-        if ($result === true && $controller->getCommand() === 'install') {
+        if (isset($result['severity']) && $result['severity'] === 'success' && $controller->getCommand() === 'install') {
             $this->createDemo($controller);
         }
     }
