@@ -10,6 +10,7 @@
 namespace gplcart\modules\demo;
 
 use gplcart\core\Module;
+use gplcart\core\models\Language as LanguageModel;
 
 /**
  * Main class for Demo module
@@ -18,11 +19,19 @@ class Demo extends Module
 {
 
     /**
-     * Constructor
+     * Language class instance
+     * @var \gplcart\core\models\Language $language
      */
-    public function __construct()
+    protected $language;
+
+    /**
+     * @param LanguageModel $language
+     */
+    public function __construct(LanguageModel $language)
     {
         parent::__construct();
+
+        $this->language = $language;
     }
 
     /**
@@ -89,7 +98,6 @@ class Demo extends Module
         /* @var $collection_model \gplcart\core\models\Collection */
         $collection_model = $this->getInstance('gplcart\\core\\models\\Collection');
 
-        // Adjust the store collection settings to show the demo content
         foreach ($demo_model->getCreated($store['store_id'], 'collection') as $id) {
             $collection = $collection_model->get($id);
             if (!empty($collection['status']) && isset($store['data']["collection_{$collection['type']}"])) {
@@ -99,64 +107,71 @@ class Demo extends Module
     }
 
     /**
-     * Implements hook "cli.install.after"
+     * Implements hook "install.after"
+     * @param array $data
      * @param array $result
-     * @param string $message
-     * @param \gplcart\core\controllers\cli\Install $controller
+     * @param array $cli_route
      */
-    public function hookCliInstallAfter($result, &$message, $controller)
+    public function hookInstallAfter($data, $result, $cli_route)
     {
-        if (isset($result['severity']) && $result['severity'] === 'success' && $controller->getCommand() === 'install') {
-            $this->createDemo($controller);
+        if (GC_CLI//
+                && isset($result['severity']) && $result['severity'] === 'success'//
+                && isset($cli_route['command']) && $cli_route['command'] === 'install') {
+            $this->createDemo();
         }
     }
 
     /**
      * Create demo in wizard mode
-     * @param \gplcart\core\controllers\cli\Install $controller
      */
-    protected function createDemo($controller)
+    protected function createDemo()
     {
-        /* @var $model \gplcart\modules\demo\models\Demo */
-        $model = $this->getInstance('gplcart\\modules\\demo\\models\\Demo');
+        /* @var $cli_helper \gplcart\core\helpers\Cli */
+        $cli_helper = $this->getInstance('gplcart\\core\\helpers\\Cli');
 
-        $options = $this->getHandlerOptions($model, $controller);
+        /* @var $demo_model \gplcart\modules\demo\models\Demo */
+        $demo_model = $this->getInstance('gplcart\\modules\\demo\\models\\Demo');
+
+        $options = $this->getHandlerOptions($demo_model);
 
         if (count($options) < 2) {
             return null;
         }
 
-        $title = $controller->text('Would you like to create demo content? Enter a number of demo package');
-        $input = $controller->menu($options, 0, $title);
+        $title = $this->language->text('Would you like to create demo content? Enter a number of demo package');
+
+        $input = $cli_helper->menu($options, 0, $title);
 
         if (empty($input)) {
-            return null; // Finished
+            return null;
         }
 
         $handler_id = array_search($input, $options);
 
         if (empty($handler_id)) {
-            return null; // Refused
+            return null;
         }
 
-        $created_result = $model->create(1, $handler_id);
+        $created_result = $demo_model->create(1, $handler_id);
+
         if ($created_result !== true) {
-            $controller->line($created_result);
+            $cli_helper->line($created_result);
         }
     }
 
     /**
      * Returns an array of supported demo handlers
      * @param \gplcart\modules\demo\models\Demo $model
-     * @param \gplcart\core\controllers\cli\Install $controller
      * @return array
      */
-    protected function getHandlerOptions($model, $controller)
+    protected function getHandlerOptions(\gplcart\modules\demo\models\Demo $model)
     {
-        $options = array($controller->text('No demo'));
+        $options = array($this->language->text('No demo'));
+
         foreach ($model->getHandlers() as $id => $handler) {
             $options[$id] = "$id - {$handler['title']}";
         }
+
         return $options;
     }
 
