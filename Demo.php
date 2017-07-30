@@ -93,10 +93,10 @@ class Demo extends Module
         }
 
         /* @var $demo_model \gplcart\modules\demo\models\Demo */
-        $demo_model = $this->getInstance('gplcart\\modules\\demo\\models\\Demo');
+        $demo_model = $this->getModel('Demo', 'demo');
 
         /* @var $collection_model \gplcart\core\models\Collection */
-        $collection_model = $this->getInstance('gplcart\\core\\models\\Collection');
+        $collection_model = $this->getModel('Collection');
 
         foreach ($demo_model->getCreated($store['store_id'], 'collection') as $id) {
             $collection = $collection_model->get($id);
@@ -127,10 +127,10 @@ class Demo extends Module
     protected function createDemo()
     {
         /* @var $cli_helper \gplcart\core\helpers\Cli */
-        $cli_helper = $this->getInstance('gplcart\\core\\helpers\\Cli');
+        $cli_helper = $this->getHelper('Cli');
 
         /* @var $demo_model \gplcart\modules\demo\models\Demo */
-        $demo_model = $this->getInstance('gplcart\\modules\\demo\\models\\Demo');
+        $demo_model = $this->getModel('Demo', 'demo');
 
         $options = $this->getHandlerOptions($demo_model);
 
