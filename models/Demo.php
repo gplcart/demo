@@ -59,7 +59,7 @@ class Demo extends Model
             )
         );
 
-        $this->hook->fire('module.demo.handlers', $handlers, $this);
+        $this->hook->attach('module.demo.handlers', $handlers, $this);
         return $handlers;
     }
 

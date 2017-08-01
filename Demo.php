@@ -84,9 +84,10 @@ class Demo extends Module
 
     /**
      * Implements hook "store.get.after"
+     * @param int $store_id
      * @param array $store
      */
-    public function hookStoreGetAfter(array &$store)
+    public function hookStoreGetAfter($store_id, array &$store)
     {
         if (empty($store['store_id'])) {
             return null;
@@ -109,10 +110,10 @@ class Demo extends Module
     /**
      * Implements hook "install.after"
      * @param array $data
-     * @param array $result
      * @param array $cli_route
+     * @param array $result
      */
-    public function hookInstallAfter($data, $result, $cli_route)
+    public function hookInstallAfter($data, $cli_route, $result)
     {
         if (GC_CLI//
                 && isset($result['severity']) && $result['severity'] === 'success'//
