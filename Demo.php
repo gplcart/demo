@@ -10,7 +10,6 @@
 namespace gplcart\modules\demo;
 
 use gplcart\core\Module;
-use gplcart\core\models\Language as LanguageModel;
 
 /**
  * Main class for Demo module
@@ -19,19 +18,11 @@ class Demo extends Module
 {
 
     /**
-     * Language class instance
-     * @var \gplcart\core\models\Language $language
+     * Constructor
      */
-    protected $language;
-
-    /**
-     * @param LanguageModel $language
-     */
-    public function __construct(LanguageModel $language)
+    public function __construct()
     {
         parent::__construct();
-
-        $this->language = $language;
     }
 
     /**
@@ -93,13 +84,10 @@ class Demo extends Module
             return null;
         }
 
-        /* @var $demo_model \gplcart\modules\demo\models\Demo */
-        $demo_model = $this->getModel('Demo', 'demo');
-
         /* @var $collection_model \gplcart\core\models\Collection */
         $collection_model = $this->getModel('Collection');
 
-        foreach ($demo_model->getCreated($store['store_id'], 'collection') as $id) {
+        foreach ($this->getDemoModel()->getCreated($store['store_id'], 'collection') as $id) {
             $collection = $collection_model->get($id);
             if (!empty($collection['status']) && isset($store['data']["collection_{$collection['type']}"])) {
                 $store['data']["collection_{$collection['type']}"] = $id;
@@ -115,8 +103,7 @@ class Demo extends Module
      */
     public function hookInstallAfter($data, $cli_route, $result)
     {
-        if (GC_CLI//
-                && isset($result['severity']) && $result['severity'] === 'success'//
+        if (GC_CLI && isset($result['severity']) && $result['severity'] === 'success'//
                 && isset($cli_route['command']) && $cli_route['command'] === 'install') {
             $this->createDemo();
         }
@@ -127,19 +114,16 @@ class Demo extends Module
      */
     protected function createDemo()
     {
-        /* @var $cli_helper \gplcart\core\helpers\Cli */
-        $cli_helper = $this->getHelper('Cli');
-
-        /* @var $demo_model \gplcart\modules\demo\models\Demo */
-        $demo_model = $this->getModel('Demo', 'demo');
-
-        $options = $this->getHandlerOptions($demo_model);
+        $options = $this->getHandlerOptions();
 
         if (count($options) < 2) {
             return null;
         }
 
-        $title = $this->language->text('Would you like to create demo content? Enter a number of demo package');
+        $title = $this->getLanguage()->text('Would you like to create demo content? Enter a number of demo package');
+
+        /* @var $cli_helper \gplcart\core\helpers\Cli */
+        $cli_helper = $this->getHelper('Cli');
 
         $input = $cli_helper->menu($options, 0, $title);
 
@@ -153,7 +137,7 @@ class Demo extends Module
             return null;
         }
 
-        $created_result = $demo_model->create(1, $handler_id);
+        $created_result = $this->getDemoModel()->create(1, $handler_id);
 
         if ($created_result !== true) {
             $cli_helper->line($created_result);
@@ -162,18 +146,27 @@ class Demo extends Module
 
     /**
      * Returns an array of supported demo handlers
-     * @param \gplcart\modules\demo\models\Demo $model
      * @return array
      */
-    protected function getHandlerOptions(\gplcart\modules\demo\models\Demo $model)
+    protected function getHandlerOptions()
     {
-        $options = array($this->language->text('No demo'));
+        $language = $this->getLanguage();
 
-        foreach ($model->getHandlers() as $id => $handler) {
-            $options[$id] = "$id - {$handler['title']}";
+        $options = array($language->text('No demo'));
+        foreach ($this->getDemoModel()->getHandlers() as $id => $handler) {
+            $options[$id] = $language->text('@id - @handler', array('@id' => $id, '@handler' => $handler['title']));
         }
 
         return $options;
+    }
+
+    /**
+     * Returns demo model instance
+     * @return \gplcart\modules\demo\models\Demo
+     */
+    protected function getDemoModel()
+    {
+        return $this->getModel('Demo', 'demo');
     }
 
 }
