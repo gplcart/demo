@@ -101,6 +101,7 @@ class Cli extends CliController
         if (!$this->demo->getHandler($this->data_handler_id)) {
             $this->setError('handler_id', $this->text('Unknown handler'));
         }
+        
         return !$this->isError();
     }
 

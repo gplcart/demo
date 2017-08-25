@@ -147,7 +147,7 @@ class Demo
     {
         set_time_limit(0);
 
-        foreach ($model->getCreated($store_id) as $entity => $ids) {
+        foreach ($model->get($store_id) as $entity => $ids) {
 
             if (!is_array($ids)) {
                 continue;

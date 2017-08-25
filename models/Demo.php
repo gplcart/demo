@@ -77,11 +77,11 @@ class Demo extends Model
      * Create a demo content
      * @param integer $store_id
      * @param string $handler_id
-     * @return string|integer
+     * @return string|boolean
      */
     public function create($store_id, $handler_id)
     {
-        if ($this->getCreated($store_id)) {
+        if ($this->get($store_id)) {
             return $this->language->text('Demo content already exists for the store');
         }
 
@@ -97,7 +97,7 @@ class Demo extends Model
             return $this->language->text('Demo content has not been created');
         }
 
-        $this->setCreated($store_id, $handler_id, $created);
+        $this->set($store_id, $handler_id, $created);
         return true;
     }
 
@@ -108,7 +108,7 @@ class Demo extends Model
      */
     public function delete($store_id)
     {
-        $created = $this->getCreated($store_id);
+        $created = $this->get($store_id);
 
         if (empty($created)) {
             return true;
@@ -122,7 +122,7 @@ class Demo extends Model
             $result = $ex->getMessage();
         }
 
-        $this->resetCreated($store_id);
+        $this->reset($store_id);
         return $result;
     }
 
@@ -133,7 +133,7 @@ class Demo extends Model
      * @param array $data
      * @return boolean
      */
-    public function setCreated($store_id, $handler_id, array $data)
+    public function set($store_id, $handler_id, array $data)
     {
         $saved = $this->config->get('module_demo_content', array());
 
@@ -151,7 +151,7 @@ class Demo extends Model
      * @param mixed $default
      * @return mixed
      */
-    public function getCreated($store_id, $key = null, $default = array())
+    public function get($store_id, $key = null, $default = array())
     {
         $data = $this->config->get('module_demo_content', array());
         $per_store = isset($data[$store_id]) ? (array) $data[$store_id] : $default;
@@ -159,6 +159,7 @@ class Demo extends Model
         if (isset($key)) {
             return isset($per_store[$key]) ? (array) $per_store[$key] : $default;
         }
+
         return $per_store;
     }
 
@@ -167,7 +168,7 @@ class Demo extends Model
      * @param integer $store_id
      * @return boolean
      */
-    public function resetCreated($store_id)
+    public function reset($store_id)
     {
         $data = $this->config->get('module_demo_content', array());
         unset($data[$store_id]);
@@ -175,6 +176,7 @@ class Demo extends Model
         if (empty($data)) {
             return $this->config->reset('module_demo_content');
         }
+
         return $this->config->set('module_demo_content', $data);
     }
 

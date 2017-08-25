@@ -104,6 +104,7 @@ class Demo extends BackendController
     protected function createDemo()
     {
         $this->controlAccessSuperAdmin();
+
         $store_id = $this->getSubmitted('store_id', 1);
         $handler_id = $this->getSubmitted('handler_id');
 

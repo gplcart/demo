@@ -87,7 +87,10 @@ class Demo extends Module
         /* @var $collection_model \gplcart\core\models\Collection */
         $collection_model = $this->getModel('Collection');
 
-        foreach ($this->getDemoModel()->getCreated($store['store_id'], 'collection') as $id) {
+        /* @var $demo_model \gplcart\modules\demo\models\Demo */
+        $demo_model = $this->getModel('Demo', 'demo');
+
+        foreach ($demo_model->get($store['store_id'], 'collection') as $id) {
             $collection = $collection_model->get($id);
             if (!empty($collection['status']) && isset($store['data']["collection_{$collection['type']}"])) {
                 $store['data']["collection_{$collection['type']}"] = $id;
@@ -96,77 +99,27 @@ class Demo extends Module
     }
 
     /**
-     * Implements hook "install.after"
-     * @param array $data
-     * @param array $cli_route
-     * @param array $result
+     * Create a demo content
+     * @param integer $store_id
+     * @param string $handler_id
+     * @return string|boolean
      */
-    public function hookInstallAfter($data, $cli_route, $result)
+    public function create($store_id, $handler_id)
     {
-        if (GC_CLI && isset($result['severity']) && $result['severity'] === 'success'//
-                && isset($cli_route['command']) && $cli_route['command'] === 'install') {
-            $this->createDemo();
-        }
+        /* @var $model \gplcart\modules\demo\models\Demo */
+        $model = $this->getModel('Demo', 'demo');
+        return $model->create($store_id, $handler_id);
     }
 
     /**
-     * Create demo in wizard mode
-     */
-    protected function createDemo()
-    {
-        $options = $this->getHandlerOptions();
-
-        if (count($options) < 2) {
-            return null;
-        }
-
-        $title = $this->getLanguage()->text('Would you like to create demo content? Enter a number of demo package');
-
-        /* @var $cli_helper \gplcart\core\helpers\Cli */
-        $cli_helper = $this->getHelper('Cli');
-
-        $input = $cli_helper->menu($options, 0, $title);
-
-        if (empty($input)) {
-            return null;
-        }
-
-        $handler_id = array_search($input, $options);
-
-        if (empty($handler_id)) {
-            return null;
-        }
-
-        $created_result = $this->getDemoModel()->create(1, $handler_id);
-
-        if ($created_result !== true) {
-            $cli_helper->line($created_result);
-        }
-    }
-
-    /**
-     * Returns an array of supported demo handlers
+     * Returns an array of demo handlers
      * @return array
      */
-    protected function getHandlerOptions()
+    public function getHandlers()
     {
-        $language = $this->getLanguage();
-
-        $options = array($language->text('No demo'));
-        foreach ($this->getDemoModel()->getHandlers() as $id => $handler) {
-            $options[$id] = $language->text('@id - @handler', array('@id' => $id, '@handler' => $handler['title']));
-        }
-
-        return $options;
-    }
-
-    /**
-     * Returns demo model instance
-     * @return \gplcart\modules\demo\models\Demo
-     */
-    protected function getDemoModel()
-    {
-        return $this->getModel('Demo', 'demo');
+        /* @var $model \gplcart\modules\demo\models\Demo */
+        $model = $this->getModel('Demo', 'demo');
+        return $model->getHandlers();
     }
 
 }
