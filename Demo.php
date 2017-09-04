@@ -80,10 +80,17 @@ class Demo extends Module
      */
     public function hookStoreGetAfter($store_id, array &$store)
     {
-        if (empty($store['store_id'])) {
-            return null;
+        if (!empty($store['store_id'])) {
+            $this->replaceStoreCollection($store);
         }
+    }
 
+    /**
+     * Replace collection settings in the store settings
+     * @param array $store
+     */
+    protected function replaceStoreCollection(array &$store)
+    {
         /* @var $collection_model \gplcart\core\models\Collection */
         $collection_model = $this->getModel('Collection');
 

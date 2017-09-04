@@ -27,24 +27,21 @@
     <?php } ?>
     </div>
   </div>
-  
-      <div class="form-group<?php echo $this->error('store_id', ' has-error'); ?>">
-        <label class="control-label col-md-2"><?php echo $this->text('Store'); ?></label>
-        <div class="col-md-4">
-        <select class="form-control" name="demo[store_id]">
-          <?php foreach ($stores as $store_id => $store) { ?>
-          <option value="<?php echo $store_id; ?>"<?php echo isset($demo['store_id']) && $demo['store_id'] == $store_id ? ' selected' : ''; ?>>
-            <?php echo $this->e($store['name']); ?>
-          </option>
-          <?php } ?>
-        </select>
-        <?php if ($this->error('store_id', true)) { ?>
-        <div class="help-block"><?php echo $this->error('store_id'); ?></div>
-        <?php } ?>
-        </div>
-      </div>
-  
-  
+  <div class="form-group<?php echo $this->error('store_id', ' has-error'); ?>">
+    <label class="control-label col-md-2"><?php echo $this->text('Store'); ?></label>
+    <div class="col-md-4">
+    <select class="form-control" name="demo[store_id]">
+      <?php foreach ($stores as $store_id => $store) { ?>
+      <option value="<?php echo $store_id; ?>"<?php echo isset($demo['store_id']) && $demo['store_id'] == $store_id ? ' selected' : ''; ?>>
+        <?php echo $this->e($store['name']); ?>
+      </option>
+      <?php } ?>
+    </select>
+    <?php if ($this->error('store_id', true)) { ?>
+    <div class="help-block"><?php echo $this->error('store_id'); ?></div>
+    <?php } ?>
+    </div>
+  </div>
   <div class="form-group">
     <div class="col-md-4 col-md-offset-2">
     <div class="btn-toolbar">
