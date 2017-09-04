@@ -27,7 +27,7 @@ class Cli extends CliController
 
     /**
      * Store model class instance
-     * @var \gplcart\modules\demo\models\Store $store
+     * @var \gplcart\core\models\Store $store
      */
     protected $store;
 

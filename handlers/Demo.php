@@ -118,7 +118,7 @@ class Demo
     /**
      * Creates all demo content
      * @param integer $store_id
-     * @return boolean
+     * @return array
      */
     public function create($store_id)
     {
@@ -142,6 +142,7 @@ class Demo
      * Deletes all created demo content
      * @param integer $store_id
      * @param \gplcart\modules\demo\models\Demo $model
+     * @return bool
      */
     public function delete($store_id, $model)
     {
