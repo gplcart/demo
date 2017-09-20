@@ -32,7 +32,7 @@ class Demo extends Module
     public function hookRouteList(array &$routes)
     {
         $routes['admin/tool/demo'] = array(
-            'menu' => array('admin' => 'Demo content'),
+            'menu' => array('admin' => /* @text */'Demo content'),
             'access' => '__superadmin',
             'handlers' => array(
                 'controller' => array('gplcart\\modules\\demo\\controllers\\Demo', 'editDemo')
@@ -51,10 +51,10 @@ class Demo extends Module
                 'process' => array('gplcart\\modules\\demo\\controllers\\Cli', 'createCli')
             ),
             'help' => array(
-                'description' => 'Populate a store with a demo content',
+                'description' => /* @text */'Populate a store with a demo content',
                 'options' => array(
-                    '--package' => 'Optional. A package ID used as an source. Defaults to "default"',
-                    '--store' => 'Optional. A numeric ID of the store you want to create demo content for. Defaults to 1'
+                    '--package' => /* @text */'Optional. A package ID used as an source. Defaults to "default"',
+                    '--store' => /* @text */'Optional. A numeric ID of the store you want to create demo content for. Defaults to 1'
                 )
             )
         );
@@ -64,10 +64,10 @@ class Demo extends Module
                 'process' => array('gplcart\\modules\\demo\\controllers\\Cli', 'deleteCli')
             ),
             'help' => array(
-                'description' => 'Delete all created demo content from a store',
+                'description' => /* @text */'Delete all created demo content from a store',
                 'options' => array(
-                    '--package' => 'Optional. A package ID used as an source. Defaults to "default"',
-                    '--store' => 'Optional. A numeric ID of the store you want to delete demo content from. Defaults to 1'
+                    '--package' => /* @text */'Optional. A package ID used as an source. Defaults to "default"',
+                    '--store' => /* @text */'Optional. A numeric ID of the store you want to delete demo content from. Defaults to 1'
                 )
             )
         );
