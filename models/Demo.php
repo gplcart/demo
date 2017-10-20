@@ -85,13 +85,7 @@ class Demo extends Model
             return $this->language->text('Demo content already exists for the store');
         }
 
-        $handlers = $this->getHandlers();
-
-        try {
-            $created = Handler::call($handlers, $handler_id, 'create', array($store_id, $this));
-        } catch (Exception $ex) {
-            return $ex->getMessage();
-        }
+        $created = $this->callHandler($handler_id, 'create', array($store_id, $this));
 
         if (empty($created)) {
             return $this->language->text('Demo content has not been created');
@@ -99,6 +93,26 @@ class Demo extends Model
 
         $this->set($store_id, $handler_id, $created);
         return true;
+    }
+
+    /**
+     * Call a handler
+     * @param string $handler_id
+     * @param string $method
+     * @param array $arguments
+     * @return mixed
+     */
+    public function callHandler($handler_id, $method, $arguments = array())
+    {
+        $handlers = $this->getHandlers();
+
+        try {
+            $result = Handler::call($handlers, $handler_id, $method, $arguments);
+        } catch (Exception $ex) {
+            return $ex->getMessage();
+        }
+
+        return $result;
     }
 
     /**
@@ -114,14 +128,7 @@ class Demo extends Model
             return true;
         }
 
-        $handlers = $this->getHandlers();
-
-        try {
-            $result = Handler::call($handlers, $created['handler_id'], 'delete', array($store_id, $this));
-        } catch (Exception $ex) {
-            $result = $ex->getMessage();
-        }
-
+        $result = $this->callHandler($created['handler_id'], 'delete', array($store_id, $this));
         $this->reset($store_id);
         return $result;
     }
