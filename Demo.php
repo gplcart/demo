@@ -74,38 +74,6 @@ class Demo extends Module
     }
 
     /**
-     * Implements hook "store.get.after"
-     * @param int $store_id
-     * @param array $store
-     */
-    public function hookStoreGetAfter($store_id, array &$store)
-    {
-        if (!empty($store['store_id'])) {
-            $this->replaceStoreCollection($store);
-        }
-    }
-
-    /**
-     * Replace collection settings in the store settings
-     * @param array $store
-     */
-    protected function replaceStoreCollection(array &$store)
-    {
-        /* @var $collection_model \gplcart\core\models\Collection */
-        $collection_model = $this->getModel('Collection');
-
-        /* @var $demo_model \gplcart\modules\demo\models\Demo */
-        $demo_model = $this->getModel('Demo', 'demo');
-
-        foreach ($demo_model->get($store['store_id'], 'collection') as $id) {
-            $collection = $collection_model->get($id);
-            if (!empty($collection['status']) && isset($store['data']["collection_{$collection['type']}"])) {
-                $store['data']["collection_{$collection['type']}"] = $id;
-            }
-        }
-    }
-
-    /**
      * Create a demo content
      * @param integer $store_id
      * @param string $handler_id
