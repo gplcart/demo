@@ -45,7 +45,7 @@
   <div class="form-group">
     <div class="col-md-4 col-md-offset-2">
     <div class="btn-toolbar">
-      <button class="btn btn-danger" name="delete" value="1" onclick="return confirm(Gplcart.text('Are you sure? It cannot be undone!'));"><?php echo $this->text('Delete'); ?></button>
+      <button class="btn btn-danger" name="delete" value="1" onclick="return confirm('<?php echo $this->text('Are you sure? It cannot be undone!'); ?>');"><?php echo $this->text('Delete'); ?></button>
       <button class="btn btn-default" name="create" value="1"><?php echo $this->text('Create'); ?></button>
     </div>
     </div>
