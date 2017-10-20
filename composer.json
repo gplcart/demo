@@ -1,7 +1,7 @@
 {
     "name": "gplcart/demo",
     "type": "gplcart-module",
-    "description": "Demo content for your GPL Cart store",
+    "description": "Demo content for your GPLCart store",
     "keywords": ["gplcart", "ecommerce", "shopping cart", "gplcart module", "php"],
     "license": "GPL-3.0+",
     "require": {
