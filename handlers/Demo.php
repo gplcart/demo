@@ -30,6 +30,12 @@ class Demo
     protected $file;
 
     /**
+     * User model instance
+     * @var \gplcart\core\models\User $user
+     */
+    protected $user;
+
+    /**
      * Category model instance
      * @var \gplcart\core\models\Category $category
      */
@@ -101,6 +107,7 @@ class Demo
             CollectionItemModel $collection_item)
     {
 
+        $this->user = $user;
         $this->file = $file;
         $this->product = $product;
         $this->category = $category;
@@ -108,10 +115,10 @@ class Demo
         $this->category_group = $category_group;
         $this->collection_item = $collection_item;
 
-        $this->user_id = $user->getId();
+        $this->user_id = $this->user->getId();
 
-        if (GC_CLI) {
-            $this->user_id = 1; // CLI mode, session is empty
+        if (empty($this->user_id) || GC_CLI) {
+            $this->user_id = $this->user->getSuperadminId();
         }
     }
 
@@ -159,22 +166,22 @@ class Demo
                 // to make them visible in IDE
                 switch ($entity) {
                     case 'product':
-                        $this->product->delete($id);
+                        $this->product->delete($id, false);
                         break;
                     case 'category':
-                        $this->category->delete($id);
+                        $this->category->delete($id, false);
                         break;
                     case 'category_group':
-                        $this->category_group->delete($id);
+                        $this->category_group->delete($id, false);
                         break;
                     case 'collection':
-                        $this->collection->delete($id);
+                        $this->collection->delete($id, false);
                         break;
                     case 'collection_item':
                         $this->collection_item->delete($id);
                         break;
                     case 'file':
-                        $this->file->deleteAll($id);
+                        $this->file->deleteAll($id, false);
                         break;
                 }
             }
@@ -205,16 +212,15 @@ class Demo
 
             $destination = $this->copyFile(realpath($file['path']), GC_IMAGE_DIR);
 
-            if (empty($destination)) {
-                continue;
+            if (!empty($destination)) {
+
+                $data = array(
+                    'title' => $file['title'],
+                    'path' => gplcart_file_relative($destination)
+                );
+
+                $this->created['file'][$file['title']] = $this->file->add($data);
             }
-
-            $data = array(
-                'title' => $file['title'],
-                'path' => gplcart_file_relative_path($destination)
-            );
-
-            $this->created['file'][$file['title']] = $this->file->add($data);
         }
     }
 
@@ -286,7 +292,7 @@ class Demo
                 $data = array(
                     'id_key' => 'product_id',
                     'id_value' => $product_id,
-                    'path' => gplcart_file_relative_path($destination)
+                    'path' => gplcart_file_relative($destination)
                 );
 
                 $this->created['file'][$destination] = $this->file->add($data);
@@ -306,6 +312,7 @@ class Demo
             $destination = gplcart_file_unique("$directory/" . basename($source));
             return copy($source, $destination) ? $destination : '';
         }
+
         return '';
     }
 
