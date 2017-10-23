@@ -210,7 +210,7 @@ class Demo
 
         foreach ($data as $file) {
 
-            $destination = $this->copyFile(realpath($file['path']), GC_IMAGE_DIR);
+            $destination = $this->copyFile(realpath($file['path']), GC_DIR_IMAGE);
 
             if (!empty($destination)) {
 
