@@ -9,7 +9,6 @@
 
 namespace gplcart\modules\demo\models;
 
-use Exception;
 use gplcart\core\Model,
     gplcart\core\Handler;
 use gplcart\core\models\Language as LanguageModel;
@@ -74,6 +73,26 @@ class Demo extends Model
     }
 
     /**
+     * Call a handler
+     * @param string $handler_id
+     * @param string $method
+     * @param array $arguments
+     * @return mixed
+     */
+    public function callHandler($handler_id, $method, $arguments = array())
+    {
+        $handlers = $this->getHandlers();
+
+        try {
+            $result = Handler::call($handlers, $handler_id, $method, $arguments);
+        } catch (\Exception $ex) {
+            return $ex->getMessage();
+        }
+
+        return $result;
+    }
+
+    /**
      * Create a demo content
      * @param integer $store_id
      * @param string $handler_id
@@ -93,26 +112,6 @@ class Demo extends Model
 
         $this->set($store_id, $handler_id, $created);
         return true;
-    }
-
-    /**
-     * Call a handler
-     * @param string $handler_id
-     * @param string $method
-     * @param array $arguments
-     * @return mixed
-     */
-    public function callHandler($handler_id, $method, $arguments = array())
-    {
-        $handlers = $this->getHandlers();
-
-        try {
-            $result = Handler::call($handlers, $handler_id, $method, $arguments);
-        } catch (Exception $ex) {
-            return $ex->getMessage();
-        }
-
-        return $result;
     }
 
     /**
