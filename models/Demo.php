@@ -9,8 +9,9 @@
 
 namespace gplcart\modules\demo\models;
 
-use gplcart\core\Model,
-    gplcart\core\Handler;
+use gplcart\core\Handler,
+    gplcart\core\Config,
+    gplcart\core\Hook;
 use gplcart\core\models\Language as LanguageModel;
 
 /**
@@ -20,18 +21,32 @@ class Demo extends Model
 {
 
     /**
+     * Hook class instance
+     * @var \gplcart\core\Hook $hook
+     */
+    protected $hook;
+
+    /**
+     * Config class instance
+     * @var \gplcart\core\Config $config
+     */
+    protected $config;
+
+    /**
      * Language model instance
      * @var \gplcart\core\models\Language $language
      */
     protected $language;
 
     /**
+     * @param Hook $hook
+     * @param Config $config
      * @param LanguageModel $language
      */
-    public function __construct(LanguageModel $language)
+    public function __construct(Hook $hook, Config $config, LanguageModel $language)
     {
-        parent::__construct();
-
+        $this->hook = $hook;
+        $this->config = $config;
         $this->language = $language;
     }
 
