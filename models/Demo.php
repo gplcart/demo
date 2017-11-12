@@ -17,7 +17,7 @@ use gplcart\core\models\Language as LanguageModel;
 /**
  * Manages basic behaviors and data related to Demo module
  */
-class Demo extends Model
+class Demo
 {
 
     /**
