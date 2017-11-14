@@ -26,6 +26,8 @@ class Demo extends Module
         parent::__construct($config);
     }
 
+    /* ------------------------- Hooks ------------------------- */
+
     /**
      * Implements hook "route.list"
      * @param array $routes
@@ -73,6 +75,8 @@ class Demo extends Module
             )
         );
     }
+
+    /* ------------------------- API ------------------------- */
 
     /**
      * Create a demo content
