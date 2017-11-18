@@ -22,7 +22,7 @@ class Demo extends BackendController
      * Demo module model instance
      * @var \gplcart\modules\demo\models\Demo $demo
      */
-    protected $demo;
+    protected $demo_model;
 
     /**
      * @param DemoModuleModel $demo
@@ -31,7 +31,7 @@ class Demo extends BackendController
     {
         parent::__construct();
 
-        $this->demo = $demo;
+        $this->demo_model = $demo;
     }
 
     /**
@@ -43,7 +43,7 @@ class Demo extends BackendController
         $this->setBreadcrumbEditDemo();
 
         $this->setData('stores', $this->store->getList());
-        $this->setData('handlers', $this->demo->getHandlers());
+        $this->setData('handlers', $this->demo_model->getHandlers());
 
         $this->submitDemo();
         $this->outputEditDemo();
@@ -91,7 +91,7 @@ class Demo extends BackendController
         $this->setSubmitted('demo');
         $handler_id = $this->getSubmitted('handler_id');
 
-        if (empty($handler_id) || !$this->demo->getHandler($handler_id)) {
+        if (empty($handler_id) || !$this->demo_model->getHandler($handler_id)) {
             $this->setError('handler_id', $this->language->text('Unknown handler'));
         }
 
@@ -108,7 +108,7 @@ class Demo extends BackendController
         $store_id = $this->getSubmitted('store_id', 1);
         $handler_id = $this->getSubmitted('handler_id');
 
-        $result = $this->demo->create($store_id, $handler_id);
+        $result = $this->demo_model->create($store_id, $handler_id);
 
         if ($result === true) {
             $this->redirect('', $this->text('Demo content has been created'), 'success');
@@ -124,7 +124,7 @@ class Demo extends BackendController
     {
         $this->controlAccessSuperAdmin();
 
-        $result = $this->demo->delete($this->getSubmitted('store_id', 1));
+        $result = $this->demo_model->delete($this->getSubmitted('store_id', 1));
 
         if ($result === true) {
             $this->redirect('', $this->text('Demo content has been deleted'), 'success');
