@@ -290,8 +290,8 @@ class Demo
                 }
 
                 $data = array(
-                    'id_key' => 'product_id',
-                    'id_value' => $product_id,
+                    'entity' => 'product',
+                    'entity_id' => $product_id,
                     'path' => gplcart_file_relative($destination)
                 );
 
