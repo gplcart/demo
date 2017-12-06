@@ -9,24 +9,13 @@
 
 namespace gplcart\modules\demo;
 
-use gplcart\core\Module,
-    gplcart\core\Config;
+use gplcart\core\Container;
 
 /**
  * Main class for Demo module
  */
-class Demo extends Module
+class Demo
 {
-
-    /**
-     * @param Config $config
-     */
-    public function __construct(Config $config)
-    {
-        parent::__construct($config);
-    }
-
-    /* ------------------------- Hooks ------------------------- */
 
     /**
      * Implements hook "route.list"
@@ -76,8 +65,6 @@ class Demo extends Module
         );
     }
 
-    /* ------------------------- API ------------------------- */
-
     /**
      * Create a demo content
      * @param integer $store_id
@@ -86,9 +73,7 @@ class Demo extends Module
      */
     public function create($store_id, $handler_id)
     {
-        /* @var $model \gplcart\modules\demo\models\Demo */
-        $model = $this->getModel('Demo', 'demo');
-        return $model->create($store_id, $handler_id);
+        return $this->getModel()->create($store_id, $handler_id);
     }
 
     /**
@@ -97,9 +82,16 @@ class Demo extends Module
      */
     public function getHandlers()
     {
-        /* @var $model \gplcart\modules\demo\models\Demo */
-        $model = $this->getModel('Demo', 'demo');
-        return $model->getHandlers();
+        return $this->getModel()->getHandlers();
+    }
+
+    /**
+     * Returns model instance
+     * @return \gplcart\modules\demo\models\Demo
+     */
+    protected function getModel()
+    {
+        return Container::get('gplcart\\modules\\demo\\models\\Demo');
     }
 
 }
