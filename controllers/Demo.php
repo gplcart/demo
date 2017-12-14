@@ -92,7 +92,7 @@ class Demo extends BackendController
         $handler_id = $this->getSubmitted('handler_id');
 
         if (empty($handler_id) || !$this->demo_model->getHandler($handler_id)) {
-            $this->setError('handler_id', $this->language->text('Unknown handler'));
+            $this->setError('handler_id', $this->text('Unknown handler'));
         }
 
         return !$this->hasErrors();

@@ -9,10 +9,10 @@
 
 namespace gplcart\modules\demo\models;
 
-use gplcart\core\Handler,
+use gplcart\core\Hook,
     gplcart\core\Config,
-    gplcart\core\Hook;
-use gplcart\core\models\Language as LanguageModel;
+    gplcart\core\Handler;
+use gplcart\core\models\Translation as TranslationModel;
 
 /**
  * Manages basic behaviors and data related to Demo module
@@ -33,21 +33,21 @@ class Demo
     protected $config;
 
     /**
-     * Language model instance
-     * @var \gplcart\core\models\Language $language
+     * Translation UI model instance
+     * @var \gplcart\core\models\Translation $translation
      */
-    protected $language;
+    protected $translation;
 
     /**
      * @param Hook $hook
      * @param Config $config
-     * @param LanguageModel $language
+     * @param TranslationModel $translation
      */
-    public function __construct(Hook $hook, Config $config, LanguageModel $language)
+    public function __construct(Hook $hook, Config $config, TranslationModel $translation)
     {
         $this->hook = $hook;
         $this->config = $config;
-        $this->language = $language;
+        $this->translation = $translation;
     }
 
     /**
@@ -64,8 +64,8 @@ class Demo
         $handlers = array();
 
         $handlers['default'] = array(
-            'title' => $this->language->text('Default (watches)'),
-            'description' => $this->language->text('Create basic demo set containing products, categories and banners'),
+            'title' => $this->translation->text('Default (watches)'),
+            'description' => $this->translation->text('Create basic demo set containing products, categories and banners'),
             'handlers' => array(
                 'create' => array('gplcart\\modules\\demo\\handlers\\Demo', 'create'),
                 'delete' => array('gplcart\\modules\\demo\\handlers\\Demo', 'delete')
@@ -96,9 +96,8 @@ class Demo
      */
     public function callHandler($handler_id, $method, $arguments = array())
     {
-        $handlers = $this->getHandlers();
-
         try {
+            $handlers = $this->getHandlers();
             $result = Handler::call($handlers, $handler_id, $method, $arguments);
         } catch (\Exception $ex) {
             return $ex->getMessage();
@@ -116,13 +115,13 @@ class Demo
     public function create($store_id, $handler_id)
     {
         if ($this->get($store_id)) {
-            return $this->language->text('Demo content already exists for the store');
+            return $this->translation->text('Demo content already exists for the store');
         }
 
         $created = $this->callHandler($handler_id, 'create', array($store_id, $this));
 
         if (empty($created)) {
-            return $this->language->text('Demo content has not been created');
+            return $this->translation->text('Demo content has not been created');
         }
 
         $this->set($store_id, $handler_id, $created);
@@ -157,8 +156,6 @@ class Demo
     public function set($store_id, $handler_id, array $data)
     {
         $saved = $this->config->get('module_demo_content', array());
-
-        // Remove unneeded keys before saving
         $saved[$store_id] = array_map('array_values', $data);
         $saved[$store_id]['handler_id'] = $handler_id;
 
