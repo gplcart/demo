@@ -9,6 +9,7 @@
 
 namespace gplcart\modules\demo\models;
 
+use Exception;
 use gplcart\core\Hook,
     gplcart\core\Config,
     gplcart\core\Handler;
@@ -99,7 +100,7 @@ class Demo
         try {
             $handlers = $this->getHandlers();
             $result = Handler::call($handlers, $handler_id, $method, $arguments);
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             return $ex->getMessage();
         }
 
@@ -183,11 +184,15 @@ class Demo
 
     /**
      * Removes all saved data about previously created entity IDs from the database
-     * @param integer $store_id
+     * @param integer|null $store_id
      * @return boolean
      */
     public function reset($store_id)
     {
+        if (!isset($store_id)) {
+            return $this->config->reset('module_demo_content');
+        }
+
         $data = $this->config->get('module_demo_content', array());
         unset($data[$store_id]);
 
