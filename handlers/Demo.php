@@ -9,6 +9,7 @@
 
 namespace gplcart\modules\demo\handlers;
 
+use gplcart\core\Config;
 use gplcart\core\models\File as FileModel,
     gplcart\core\models\User as UserModel,
     gplcart\core\models\Product as ProductModel,
@@ -22,6 +23,12 @@ use gplcart\core\models\File as FileModel,
  */
 class Demo
 {
+
+    /**
+     * Config class instance
+     * @var \gplcart\core\Config $config
+     */
+    protected $config;
 
     /**
      * File model instance
@@ -93,6 +100,7 @@ class Demo
     protected $user_id;
 
     /**
+     * @param Config $config
      * @param UserModel $user
      * @param FileModel $file
      * @param ProductModel $product
@@ -101,14 +109,13 @@ class Demo
      * @param CategoryGroupModel $category_group
      * @param CollectionItemModel $collection_item
      */
-    public function __construct(UserModel $user, FileModel $file,
-            ProductModel $product, CategoryModel $category,
-            CollectionModel $collection, CategoryGroupModel $category_group,
-            CollectionItemModel $collection_item)
+    public function __construct(Config $config, UserModel $user, FileModel $file,
+            ProductModel $product, CategoryModel $category, CollectionModel $collection,
+            CategoryGroupModel $category_group, CollectionItemModel $collection_item)
     {
-
         $this->user = $user;
         $this->file = $file;
+        $this->config = $config;
         $this->product = $product;
         $this->category = $category;
         $this->collection = $collection;
@@ -281,9 +288,12 @@ class Demo
                 continue;
             }
 
+            $dirname = $this->config->get('product_image_dirname', 'product');
+            $dir = gplcart_path_absolute($dirname, GC_DIR_IMAGE);
+
             foreach (glob("$directory/*.{jpg,png,gif}", GLOB_BRACE) as $file) {
 
-                $destination = $this->copyFile($file, $this->product->getImagePath(true));
+                $destination = $this->copyFile($file, $dir);
 
                 if (empty($destination)) {
                     continue;
