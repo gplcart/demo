@@ -14,7 +14,7 @@ use gplcart\core\Container;
 /**
  * Main class for Demo module
  */
-class Module
+class Main
 {
 
     /**
