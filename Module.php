@@ -40,7 +40,7 @@ class Module
     {
         $routes['demo-create'] = array(
             'handlers' => array(
-                'process' => array('gplcart\\modules\\demo\\controllers\\Cli', 'createCli')
+                'controller' => array('gplcart\\modules\\demo\\controllers\\Cli', 'createCli')
             ),
             'help' => array(
                 'description' => /* @text */'Populate a store with a demo content',
@@ -53,7 +53,7 @@ class Module
 
         $routes['demo-delete'] = array(
             'handlers' => array(
-                'process' => array('gplcart\\modules\\demo\\controllers\\Cli', 'deleteCli')
+                'controller' => array('gplcart\\modules\\demo\\controllers\\Cli', 'deleteCli')
             ),
             'help' => array(
                 'description' => /* @text */'Delete all created demo content from a store',
