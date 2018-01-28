@@ -10,13 +10,13 @@
 namespace gplcart\modules\demo\handlers;
 
 use gplcart\core\Config;
-use gplcart\core\models\File as FileModel,
-    gplcart\core\models\User as UserModel,
-    gplcart\core\models\Product as ProductModel,
-    gplcart\core\models\Category as CategoryModel,
-    gplcart\core\models\Collection as CollectionModel,
-    gplcart\core\models\CollectionItem as CollectionItemModel,
-    gplcart\core\models\CategoryGroup as CategoryGroupModel;
+use gplcart\core\models\Category as CategoryModel;
+use gplcart\core\models\CategoryGroup as CategoryGroupModel;
+use gplcart\core\models\Collection as CollectionModel;
+use gplcart\core\models\CollectionItem as CollectionItemModel;
+use gplcart\core\models\File as FileModel;
+use gplcart\core\models\Product as ProductModel;
+use gplcart\core\models\User as UserModel;
 
 /**
  * Handler for Demo module
@@ -110,8 +110,8 @@ class Demo
      * @param CollectionItemModel $collection_item
      */
     public function __construct(Config $config, UserModel $user, FileModel $file,
-            ProductModel $product, CategoryModel $category, CollectionModel $collection,
-            CategoryGroupModel $category_group, CollectionItemModel $collection_item)
+                                ProductModel $product, CategoryModel $category, CollectionModel $collection,
+                                CategoryGroupModel $category_group, CollectionItemModel $collection_item)
     {
         $this->user = $user;
         $this->file = $file;
@@ -144,7 +144,6 @@ class Demo
         $this->createCategories();
         $this->createProducts();
         $this->createProductImages();
-
         $this->createCollections();
         $this->createFiles();
         $this->createCollectionItems();
@@ -203,8 +202,9 @@ class Demo
     protected function createCollections()
     {
         $data = include __DIR__ . '/../config/default/collection.php';
-        foreach ($data as $collection) {
-            $this->created['collection'][$collection['title']] = $this->collection->add($collection);
+
+        foreach ($data as $item) {
+            $this->created['collection'][$item['title']] = $this->collection->add($item);
         }
     }
 
@@ -215,18 +215,18 @@ class Demo
     {
         $data = include __DIR__ . '/../config/default/file.php';
 
-        foreach ($data as $file) {
+        foreach ($data as $item) {
 
-            $destination = $this->copyFile(realpath($file['path']), GC_DIR_IMAGE);
+            $destination = $this->copyFile(realpath($item['path']), GC_DIR_IMAGE);
 
             if (!empty($destination)) {
 
-                $data = array(
-                    'title' => $file['title'],
+                $file = array(
+                    'title' => $item['title'],
                     'path' => gplcart_file_relative($destination)
                 );
 
-                $this->created['file'][$file['title']] = $this->file->add($data);
+                $this->created['file'][$item['title']] = $this->file->add($file);
             }
         }
     }
@@ -237,6 +237,7 @@ class Demo
     protected function createCollectionItems()
     {
         $data = include __DIR__ . '/../config/default/collection_item.php';
+
         foreach ($data as $item) {
             $this->created['collection_item'][] = $this->collection_item->add($item);
         }
@@ -248,8 +249,9 @@ class Demo
     protected function createCategoryGroups()
     {
         $data = include __DIR__ . '/../config/default/category_group.php';
-        foreach ($data as $category_group) {
-            $this->created['category_group'][$category_group['title']] = $this->category_group->add($category_group);
+
+        foreach ($data as $item) {
+            $this->created['category_group'][$item['title']] = $this->category_group->add($item);
         }
     }
 
@@ -259,8 +261,9 @@ class Demo
     protected function createCategories()
     {
         $data = include __DIR__ . '/../config/default/category.php';
-        foreach ($data as $category) {
-            $this->created['category'][$category['title']] = $this->category->add($category);
+
+        foreach ($data as $item) {
+            $this->created['category'][$item['title']] = $this->category->add($item);
         }
     }
 
@@ -270,8 +273,9 @@ class Demo
     protected function createProducts()
     {
         $data = include __DIR__ . '/../config/default/product.php';
-        foreach ($data as $product) {
-            $this->created['product'][$product['sku']] = $this->product->add($product);
+
+        foreach ($data as $item) {
+            $this->created['product'][$item['sku']] = $this->product->add($item);
         }
     }
 
