@@ -54,8 +54,8 @@ class Cli extends CliController
         $this->demo = $demo;
         $this->store = $store;
 
-        $this->data_store_id = $this->getArgument('store', 1);
-        $this->data_handler_id = $this->getArgument('package', 'default');
+        $this->data_store_id = $this->getParam('store', 1);
+        $this->data_handler_id = $this->getParam('package', 'default');
     }
 
     /**
