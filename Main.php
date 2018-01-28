@@ -25,7 +25,7 @@ class Main
     {
         $routes['admin/tool/demo'] = array(
             'menu' => array('admin' => /* @text */'Demo content'),
-            'access' => '__superadmin',
+            'access' => '_superadmin',
             'handlers' => array(
                 'controller' => array('gplcart\\modules\\demo\\controllers\\Demo', 'editDemo')
             )
