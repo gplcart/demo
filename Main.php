@@ -24,7 +24,9 @@ class Main
     public function hookRouteList(array &$routes)
     {
         $routes['admin/tool/demo'] = array(
-            'menu' => array('admin' => /* @text */'Demo content'),
+            'menu' => array(
+                'admin' => 'Demo content' // @text
+            ),
             'access' => '_superadmin',
             'handlers' => array(
                 'controller' => array('gplcart\\modules\\demo\\controllers\\Demo', 'editDemo')
@@ -43,10 +45,10 @@ class Main
                 'controller' => array('gplcart\\modules\\demo\\controllers\\Cli', 'createCli')
             ),
             'help' => array(
-                'description' => /* @text */'Populate a store with a demo content',
+                'description' => 'Populate a store with a demo content', // @text
                 'options' => array(
-                    '--package' => /* @text */'Optional. A package ID used as an source. Defaults to "default"',
-                    '--store' => /* @text */'Optional. A numeric ID of the store you want to create demo content for. Defaults to 1'
+                    '--package' => 'Optional. A package ID used as an source. Defaults to "default"', // @text
+                    '--store' => 'Optional. A numeric ID of the store you want to create demo content for. Defaults to 1' // @text
                 )
             )
         );
@@ -56,10 +58,10 @@ class Main
                 'controller' => array('gplcart\\modules\\demo\\controllers\\Cli', 'deleteCli')
             ),
             'help' => array(
-                'description' => /* @text */'Delete all created demo content from a store',
+                'description' => 'Delete all created demo content from a store', // @text
                 'options' => array(
-                    '--package' => /* @text */'Optional. A package ID used as an source. Defaults to "default"',
-                    '--store' => /* @text */'Optional. A numeric ID of the store you want to delete demo content from. Defaults to 1'
+                    '--package' => 'Optional. A package ID used as an source. Defaults to "default"', // @text
+                    '--store' => 'Optional. A numeric ID of the store you want to delete demo content from. Defaults to 1' // @text
                 )
             )
         );
