@@ -27,7 +27,7 @@ class Main
             'menu' => array(
                 'admin' => 'Demo content' // @text
             ),
-            'access' => '_superadmin',
+            'access' => GC_PERM_SUPERADMIN,
             'handlers' => array(
                 'controller' => array('gplcart\\modules\\demo\\controllers\\Demo', 'editDemo')
             )
