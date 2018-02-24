@@ -10,10 +10,10 @@
 namespace gplcart\modules\demo\models;
 
 use Exception;
-use gplcart\core\Hook,
-    gplcart\core\Config,
-    gplcart\core\Handler;
-use gplcart\core\models\Translation as TranslationModel;
+use gplcart\core\Config;
+use gplcart\core\Handler;
+use gplcart\core\Hook;
+use gplcart\core\models\Translation;
 
 /**
  * Manages basic behaviors and data related to Demo module
@@ -42,9 +42,9 @@ class Demo
     /**
      * @param Hook $hook
      * @param Config $config
-     * @param TranslationModel $translation
+     * @param Translation $translation
      */
-    public function __construct(Hook $hook, Config $config, TranslationModel $translation)
+    public function __construct(Hook $hook, Config $config, Translation $translation)
     {
         $this->hook = $hook;
         $this->config = $config;

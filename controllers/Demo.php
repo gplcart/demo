@@ -9,13 +9,13 @@
 
 namespace gplcart\modules\demo\controllers;
 
-use gplcart\modules\demo\models\Demo as DemoModuleModel;
-use gplcart\core\controllers\backend\Controller as BackendController;
+use gplcart\core\controllers\backend\Controller;
+use gplcart\modules\demo\models\Demo as DemoModel;
 
 /**
  * Handles incoming requests and outputs data related to Demo module
  */
-class Demo extends BackendController
+class Demo extends Controller
 {
 
     /**
@@ -25,9 +25,9 @@ class Demo extends BackendController
     protected $demo_model;
 
     /**
-     * @param DemoModuleModel $demo
+     * @param DemoModel $demo
      */
-    public function __construct(DemoModuleModel $demo)
+    public function __construct(DemoModel $demo)
     {
         parent::__construct();
 

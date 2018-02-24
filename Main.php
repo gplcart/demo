@@ -41,28 +41,28 @@ class Main
     public function hookCliRouteList(array &$routes)
     {
         $routes['demo-create'] = array(
+            'description' => 'Populate a store with a demo content', // @text
+            'usage' => array(
+                'gplcart demo-create -h',
+                'gplcart demo-create [--package=<string> --store=<int>]'
+            ),
+            'options' => array(
+                '--package' => 'A package ID used as an source [default: default]', // @text
+                '--store' => 'A numeric ID of the store you want to create demo content for [default: 1]' // @text
+            ),
             'handlers' => array(
                 'controller' => array('gplcart\\modules\\demo\\controllers\\Cli', 'createCli')
-            ),
-            'help' => array(
-                'description' => 'Populate a store with a demo content', // @text
-                'options' => array(
-                    '--package' => 'Optional. A package ID used as an source. Defaults to "default"', // @text
-                    '--store' => 'Optional. A numeric ID of the store you want to create demo content for. Defaults to 1' // @text
-                )
             )
         );
 
         $routes['demo-delete'] = array(
+            'description' => 'Delete all created demo content from a store', // @text
+            'options' => array(
+                '--package' => 'A package ID used as an source [default: default]', // @text
+                '--store' => 'A numeric ID of the store you want to create demo content for [default: 1]' // @text
+            ),
             'handlers' => array(
                 'controller' => array('gplcart\\modules\\demo\\controllers\\Cli', 'deleteCli')
-            ),
-            'help' => array(
-                'description' => 'Delete all created demo content from a store', // @text
-                'options' => array(
-                    '--package' => 'Optional. A package ID used as an source. Defaults to "default"', // @text
-                    '--store' => 'Optional. A numeric ID of the store you want to delete demo content from. Defaults to 1' // @text
-                )
             )
         );
     }
@@ -91,9 +91,10 @@ class Main
      * Returns model instance
      * @return \gplcart\modules\demo\models\Demo
      */
-    protected function getModel()
+    public function getModel()
     {
-        return Container::get('gplcart\\modules\\demo\\models\\Demo');
+        /** @var \gplcart\modules\demo\models\Demo $instance */
+        $instance = Container::get('gplcart\\modules\\demo\\models\\Demo');
+        return $instance;
     }
-
 }

@@ -1,17 +1,17 @@
 <?php
 
 /**
- * @package Demo 
- * @author Iurii Makukh <gplcart.software@gmail.com> 
- * @copyright Copyright (c) 2017, Iurii Makukh <gplcart.software@gmail.com> 
- * @license https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0+ 
+ * @package Demo
+ * @author Iurii Makukh <gplcart.software@gmail.com>
+ * @copyright Copyright (c) 2017, Iurii Makukh <gplcart.software@gmail.com>
+ * @license https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0+
  */
 
 namespace gplcart\modules\demo\controllers;
 
 use gplcart\core\CliController;
 use gplcart\core\models\Store as StoreModel;
-use gplcart\modules\demo\models\Demo as DemoModuleModel;
+use gplcart\modules\demo\models\Demo as DemoModel;
 
 /**
  * Handles Demo module CLI commands
@@ -45,9 +45,9 @@ class Cli extends CliController
 
     /**
      * @param StoreModel $store
-     * @param DemoModuleModel $demo
+     * @param DemoModel $demo
      */
-    public function __construct(StoreModel $store, DemoModuleModel $demo)
+    public function __construct(StoreModel $store, DemoModel $demo)
     {
         parent::__construct();
 
@@ -101,7 +101,7 @@ class Cli extends CliController
         if (!$this->demo->getHandler($this->data_handler_id)) {
             $this->setError('handler_id', $this->text('Unknown handler'));
         }
-        
+
         return !$this->isError();
     }
 

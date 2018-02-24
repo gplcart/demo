@@ -10,13 +10,13 @@
 namespace gplcart\modules\demo\handlers;
 
 use gplcart\core\Config;
-use gplcart\core\models\Category as CategoryModel;
-use gplcart\core\models\CategoryGroup as CategoryGroupModel;
-use gplcart\core\models\Collection as CollectionModel;
-use gplcart\core\models\CollectionItem as CollectionItemModel;
-use gplcart\core\models\File as FileModel;
-use gplcart\core\models\Product as ProductModel;
-use gplcart\core\models\User as UserModel;
+use gplcart\core\models\Category;
+use gplcart\core\models\CategoryGroup;
+use gplcart\core\models\Collection;
+use gplcart\core\models\CollectionItem;
+use gplcart\core\models\File;
+use gplcart\core\models\Product;
+use gplcart\core\models\User;
 
 /**
  * Handler for Demo module
@@ -100,18 +100,19 @@ class Demo
     protected $user_id;
 
     /**
+     * Demo constructor.
      * @param Config $config
-     * @param UserModel $user
-     * @param FileModel $file
-     * @param ProductModel $product
-     * @param CategoryModel $category
-     * @param CollectionModel $collection
-     * @param CategoryGroupModel $category_group
-     * @param CollectionItemModel $collection_item
+     * @param User $user
+     * @param File $file
+     * @param Product $product
+     * @param Category $category
+     * @param Collection $collection
+     * @param CategoryGroup $category_group
+     * @param CollectionItem $collection_item
      */
-    public function __construct(Config $config, UserModel $user, FileModel $file,
-                                ProductModel $product, CategoryModel $category, CollectionModel $collection,
-                                CategoryGroupModel $category_group, CollectionItemModel $collection_item)
+    public function __construct(Config $config, User $user, File $file,
+                                Product $product, Category $category, Collection $collection,
+                                CategoryGroup $category_group, CollectionItem $collection_item)
     {
         $this->user = $user;
         $this->file = $file;
@@ -168,8 +169,6 @@ class Demo
             }
 
             foreach ($ids as $id) {
-                // Don't call methods dynamically $this->{$entity}
-                // to make them visible in IDE
                 switch ($entity) {
                     case 'product':
                         $this->product->delete($id, false);
