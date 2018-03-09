@@ -186,7 +186,8 @@ class Demo
                         $this->collection_item->delete($id);
                         break;
                     case 'file':
-                        $this->file->deleteAll($id, false);
+                        $db = $disk = 0;
+                        $this->file->deleteAll($id, $db, $disk, false);
                         break;
                 }
             }
